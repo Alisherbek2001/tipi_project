@@ -71,6 +71,10 @@ INSTALLED_APPS = [
 
 
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+# CORS_ALLOWED_ORIGINS  = [
+#     'localhost:3000']
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
