@@ -1,15 +1,13 @@
-from rest_framework.routers import DefaultRouter
-from .views import AboutUniversityViewSet
+from .views import AboutUniversityViewSet, AdminstrationViewSet
 from django.urls import path
-from .views import AboutUniversityViewSet
 
 urlpatterns = [
     path(
         "about-university/",
         AboutUniversityViewSet.as_view(
             {
-                "get": "list",  # Barcha obyektlarni ko'rish
-                "post": "create",  # Yangi obyekt qo'shish
+                "get": "list",
+                "post": "create",
             }
         ),
         name="about-university-list",
@@ -18,12 +16,34 @@ urlpatterns = [
         "about-university/<int:pk>/",
         AboutUniversityViewSet.as_view(
             {
-                "get": "retrieve",  # Bitta obyektni ko'rish
-                "put": "update",  # To'liq o'zgartirish
-                "patch": "partial_update",  # Qisman o'zgartirish
-                "delete": "destroy",  # O'chirish
+                "get": "retrieve",
+                "put": "update",
+                "patch": "partial_update",
+                "delete": "destroy",
             }
         ),
         name="about-university-detail",
+    ),
+    path(
+        "adminstration/",
+        AdminstrationViewSet.as_view(
+            {
+                "get": "list",
+                "post": "create",
+            }
+        ),
+        name="adminstration-list",
+    ),
+    path(
+        "adminstration/<int:pk>/",
+        AdminstrationViewSet.as_view(
+            {
+                "get": "retrieve",
+                "put": "update",
+                "patch": "partial_update",
+                "delete": "destroy",
+            }
+        ),
+        name="adminstration-detail",
     ),
 ]
