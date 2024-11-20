@@ -1,5 +1,4 @@
 from django.shortcuts import render
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -80,3 +79,26 @@ class ChangePasswordView(APIView):
         return Response(
             {"message": "Parol muvaffaqiyatli yangilandi."}, status=status.HTTP_200_OK
         )
+
+
+class AdminsListAPIView(APIView):
+    permission_classes = [IsAuthenticated, IsSuperAdmin]
+
+    def get(self, request):
+        print(request.user)
+        admins = CustomUser.objects.all()
+        admins_data = [
+            {
+                "id": admin.id,
+                "username": admin.username,
+                "email": admin.email,
+                "full_name": (
+                    admin.get_full_name()
+                    if hasattr(admin, "get_full_name")
+                    else f"{admin.first_name} {admin.last_name}"
+                ),
+                "is_active": admin.is_active,
+            }
+            for admin in admins
+        ]
+        return Response(admins_data, status=status.HTTP_200_OK)

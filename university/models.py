@@ -40,6 +40,8 @@ class Faculty(BaseModel):
     is_active = models.BooleanField(default=False)
     image = models.ForeignKey(Image, on_delete=models.CASCADE)
 
+    # teachers = models.ManyToManyField("teachers.Teacher")
+
     def __str__(self) -> str:
         return self.title_uz
 
@@ -61,3 +63,14 @@ class FacultyDirection(BaseModel):
 
     def __str__(self) -> str:
         return self.title_uz
+
+
+# class Student(BaseModel):
+#     name_uz = models.CharField(max_length=255)
+#     telegram = models.CharField(max_length=255, null=True, blank=True)
+#     instagram = models.CharField(max_length=255, null=True, blank=True)
+#     facebook = models.CharField(max_length=255, null=True, blank=True)
+#     youtube = models.CharField(max_length=255, null=True, blank=True)
+#     description_uz = models.TextField(null=True, blank=True)
+#     description_ru = models.TextField(null=True, blank=True)
+#     description_en = models.TextField(null=True, blank=True)
