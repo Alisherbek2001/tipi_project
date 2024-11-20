@@ -6,6 +6,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from .models import CustomUser
 from common.permissions import IsSuperAdmin
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import CustomTokenObtainPairSerializer
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
 
 
 class CreateUserView(APIView):
