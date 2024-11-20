@@ -1,4 +1,11 @@
-from .views import AboutUniversityViewSet, AdminstrationViewSet, DepartmentViewSet
+from .views import (
+    AboutUniversityViewSet,
+    AdminstrationViewSet,
+    DepartmentViewSet,
+    FacultyCreateAPIView,
+    FacultyRetrieveAPIView,
+    FacultyAPIView,
+)
 from django.urls import path
 
 urlpatterns = [
@@ -67,5 +74,16 @@ urlpatterns = [
             }
         ),
         name="department-detail",
+    ),
+    path(
+        "faculty/",
+        FacultyCreateAPIView.as_view(),
+        name="faculty-create",
+    ),
+    path("faculty/all/", FacultyAPIView.as_view(), name="all-faculty"),
+    path(
+        "faculty/<int:pk>/",
+        FacultyRetrieveAPIView.as_view(),
+        name="faculty-detail",
     ),
 ]
