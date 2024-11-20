@@ -10,7 +10,7 @@ from .serializers import (
     FacultySerializer,
 )
 from common.permissions import IsSuperAdmin
-from rest_framework.generics import CreateAPIView, RetrieveAPIView, ListAPIView
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListAPIView
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -57,7 +57,7 @@ class FacultyCreateAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class FacultyRetrieveAPIView(RetrieveAPIView):
+class FacultyRetrieveAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Faculty.objects.all()
     serializer_class = FacultyRetrieveSerializer
