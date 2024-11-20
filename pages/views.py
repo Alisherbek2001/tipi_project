@@ -1,4 +1,8 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import (
+    ListCreateAPIView,
+    RetrieveUpdateDestroyAPIView,
+    ListAPIView,
+)
 from .models import Pages
 from .serializers import PagesCreateUpdateSerializer, PagesRetrieveSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -30,3 +34,18 @@ class PagesRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         if self.request.method in ["PUT", "PATCH"]:
             return PagesCreateUpdateSerializer
         return PagesRetrieveSerializer
+
+
+class PagesListAPIView(ListAPIView):
+    queryset = Pages.objects.all()
+    serializer_class = PagesRetrieveSerializer
+
+    def get_permissions(self):
+        return [AllowAny()]
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        pages_param = self.request.query_params.get("pages")
+        if pages_param:
+            queryset = queryset.filter(pages=pages_param)
+        return queryset
