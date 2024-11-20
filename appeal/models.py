@@ -11,4 +11,4 @@ class Murojat(BaseModel):
     status = models.CharField(max_length=255, default="Kutilmoqda")
 
     def __str__(self) -> str:
-        return super().__str__()
+        return self.name
