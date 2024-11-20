@@ -65,12 +65,17 @@ class FacultyDirection(BaseModel):
         return self.title_uz
 
 
-# class Student(BaseModel):
-#     name_uz = models.CharField(max_length=255)
-#     telegram = models.CharField(max_length=255, null=True, blank=True)
-#     instagram = models.CharField(max_length=255, null=True, blank=True)
-#     facebook = models.CharField(max_length=255, null=True, blank=True)
-#     youtube = models.CharField(max_length=255, null=True, blank=True)
-#     description_uz = models.TextField(null=True, blank=True)
-#     description_ru = models.TextField(null=True, blank=True)
-#     description_en = models.TextField(null=True, blank=True)
+class Student(BaseModel):
+    name = models.CharField(max_length=255)
+    telegram = models.CharField(max_length=255, null=True, blank=True)
+    instagram = models.CharField(max_length=255, null=True, blank=True)
+    facebook = models.CharField(max_length=255, null=True, blank=True)
+    youtube = models.CharField(max_length=255, null=True, blank=True)
+    description_uz = models.TextField(null=True, blank=True)
+    description_ru = models.TextField(null=True, blank=True)
+    description_en = models.TextField(null=True, blank=True)
+    image = models.ForeignKey(Image, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=False)
+
+    def __str__(self) -> str:
+        return self.name

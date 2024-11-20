@@ -7,6 +7,10 @@ from .views import (
     FacultyAPIView,
     FacultyUpdateAPIView,
     FacultyDirectionViewSet,
+    StudentCreateAPIView,
+    StudentRetrieveAPIView,
+    StundentAPIView,
+    StudentUpdateAPIView,
 )
 from django.urls import path
 
@@ -115,4 +119,18 @@ urlpatterns = [
         ),
         name="faculty-direction-detail",
     ),
+    path(
+        "students/", StundentAPIView.as_view(), name="student-list"
+    ),  # Barcha talabalar ro'yxati
+    path(
+        "students/create/", StudentCreateAPIView.as_view(), name="student-create"
+    ),  # Talaba yaratish
+    path(
+        "students/<int:pk>/", StudentRetrieveAPIView.as_view(), name="student-detail"
+    ),  # Talaba haqida ma'lumot
+    path(
+        "students/<int:pk>/update/",
+        StudentUpdateAPIView.as_view(),
+        name="student-update",
+    ),  # Talabani o'zgartirish
 ]

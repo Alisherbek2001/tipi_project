@@ -5,6 +5,7 @@ from .models import (
     Department,
     Faculty,
     FacultyDirection,
+    Student,
 )
 from common.models import Image
 from common.serializers import ImageSerializer
@@ -57,4 +58,30 @@ class FacultyRetrieveSerializer(serializers.ModelSerializer):
 class FacultyDirectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = FacultyDirection
+        fields = "__all__"
+
+
+class StudentCreateSerializer(serializers.ModelSerializer):
+    image = serializers.PrimaryKeyRelatedField(
+        queryset=Image.objects.all(), required=True
+    )
+
+    class Meta:
+        model = Student
+        fields = "__all__"
+
+
+class StudentSerializer(serializers.ModelSerializer):
+    image = ImageSerializer()
+
+    class Meta:
+        model = Student
+        fields = "__all__"
+
+
+class StudentRetrieveSerializer(serializers.ModelSerializer):
+    image = ImageSerializer()
+
+    class Meta:
+        model = Student
         fields = "__all__"
