@@ -1,4 +1,4 @@
-from .views import AboutUniversityViewSet, AdminstrationViewSet
+from .views import AboutUniversityViewSet, AdminstrationViewSet, DepartmentViewSet
 from django.urls import path
 
 urlpatterns = [
@@ -45,5 +45,27 @@ urlpatterns = [
             }
         ),
         name="adminstration-detail",
+    ),
+    path(
+        "department/",
+        DepartmentViewSet.as_view(
+            {
+                "get": "list",
+                "post": "create",
+            }
+        ),
+        name="department-list",
+    ),
+    path(
+        "department/<int:pk>/",
+        DepartmentViewSet.as_view(
+            {
+                "get": "retrieve",
+                "put": "update",
+                "patch": "partial_update",
+                "delete": "destroy",
+            }
+        ),
+        name="department-detail",
     ),
 ]
