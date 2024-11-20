@@ -66,11 +66,17 @@ class ChangePasswordView(APIView):
             )
 
         if new_password != confirm_new_password:
-            return Response({"error": "Yangi password bir biriga mos kelmadi"})
+            return Response({"error": "Yangi password bir biriga mos kelmadi."})
 
         if not user.check_password(old_password):
             return Response(
                 {"error": "Eski parol noto'g'ri."}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if user != request.user:
+            return Response(
+                {"error": "Siz boshqa foydalanuvchining parolini o'zgartira olmaysiz."},
+                status=status.HTTP_403_FORBIDDEN,
             )
 
         user.set_password(new_password)
@@ -116,12 +122,6 @@ class DeleteUserAPIView(APIView):
                 )
 
             user = CustomUser.objects.get(id=user_id)
-            # if user.role == "SUPER_ADMIN":
-            #     return Response(
-            #         {"error": "You cannot delete SUPER_ADMIN"},
-            #         status=status.HTTP_400_BAD_REQUEST,
-            #     )
-
             user.delete()
 
             return Response(
