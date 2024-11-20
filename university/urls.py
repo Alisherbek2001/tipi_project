@@ -6,6 +6,7 @@ from .views import (
     FacultyRetrieveAPIView,
     FacultyAPIView,
     FacultyUpdateAPIView,
+    FacultyDirectionViewSet,
 )
 from django.urls import path
 
@@ -91,5 +92,27 @@ urlpatterns = [
         "faculty/<int:pk>/update/",
         FacultyUpdateAPIView.as_view(),
         name="faculty-update",
+    ),
+    path(
+        "faculty/direction",
+        FacultyDirectionViewSet.as_view(
+            {
+                "get": "list",
+                "post": "create",
+            }
+        ),
+        name="faculty-direction-list",
+    ),
+    path(
+        "faculty/direction/<int:pk>",
+        FacultyDirectionViewSet.as_view(
+            {
+                "get": "retrieve",
+                "put": "update",
+                "patch": "partial_update",
+                "delete": "destroy",
+            }
+        ),
+        name="faculty-direction-detail",
     ),
 ]

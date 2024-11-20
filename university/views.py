@@ -1,11 +1,18 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
-from .models import AboutUniversity, Adminstration, Department, Faculty
+from .models import (
+    AboutUniversity,
+    Adminstration,
+    Department,
+    Faculty,
+    FacultyDirection,
+)
 from .serializers import (
     AboutUniversitySerializer,
     AdminstrationSerializer,
     DepartmentSerializer,
     FacultyCreateSerializer,
+    FacultyDirectionSerializer,
     FacultyRetrieveSerializer,
     FacultySerializer,
 )
@@ -63,13 +70,13 @@ class FacultyCreateAPIView(APIView):
 
 
 class FacultyRetrieveAPIView(RetrieveAPIView, DestroyAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsSuperAdmin]
     queryset = Faculty.objects.all()
     serializer_class = FacultyRetrieveSerializer
 
 
 class FacultyAPIView(ListAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsSuperAdmin]
     queryset = Faculty.objects.all()
     serializer_class = FacultySerializer
 
@@ -88,3 +95,9 @@ class FacultyUpdateAPIView(UpdateAPIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class FacultyDirectionViewSet(ModelViewSet):
+    queryset = FacultyDirection.objects.all()
+    serializer_class = FacultyDirectionSerializer
+    permission_classes = [IsAuthenticated, IsSuperAdmin]

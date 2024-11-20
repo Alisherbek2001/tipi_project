@@ -1,5 +1,11 @@
 from rest_framework import serializers
-from .models import AboutUniversity, Adminstration, Department, Faculty
+from .models import (
+    AboutUniversity,
+    Adminstration,
+    Department,
+    Faculty,
+    FacultyDirection,
+)
 from common.models import Image
 from common.serializers import ImageSerializer
 
@@ -45,4 +51,10 @@ class FacultyRetrieveSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Faculty
+        fields = "__all__"
+
+
+class FacultyDirectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FacultyDirection
         fields = "__all__"
