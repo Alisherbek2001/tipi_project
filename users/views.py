@@ -85,7 +85,6 @@ class AdminsListAPIView(APIView):
     permission_classes = [IsAuthenticated, IsSuperAdmin]
 
     def get(self, request):
-        print(request.user)
         admins = CustomUser.objects.all()
         admins_data = [
             {
@@ -103,3 +102,41 @@ class AdminsListAPIView(APIView):
             for admin in admins
         ]
         return Response(admins_data, status=status.HTTP_200_OK)
+
+
+class DeleteUserAPIView(APIView):
+    permission_classes = [IsAuthenticated, IsSuperAdmin]
+
+    def delete(self, request, user_id=None):
+        try:
+            if user_id == request.user.id:
+                return Response(
+                    {"error": "You cannot delete yourself."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            user = CustomUser.objects.get(id=user_id)
+            # if user.role == "SUPER_ADMIN":
+            #     return Response(
+            #         {"error": "You cannot delete SUPER_ADMIN"},
+            #         status=status.HTTP_400_BAD_REQUEST,
+            #     )
+
+            user.delete()
+
+            return Response(
+                {"message": f"User with ID {user_id} has been deleted successfully."},
+                status=status.HTTP_200_OK,
+            )
+
+        except CustomUser.DoesNotExist:
+            return Response(
+                {"error": "User not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        except Exception as e:
+            return Response(
+                {"error": f"An unexpected error occurred: {str(e)}"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
