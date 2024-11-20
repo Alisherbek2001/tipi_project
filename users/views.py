@@ -98,6 +98,7 @@ class AdminsListAPIView(APIView):
                     else f"{admin.first_name} {admin.last_name}"
                 ),
                 "is_active": admin.is_active,
+                "role": admin.role,
             }
             for admin in admins
         ]
