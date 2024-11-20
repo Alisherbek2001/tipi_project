@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     "university",
     "common",
     "appeal",
+    "pages",
 ]
 
 

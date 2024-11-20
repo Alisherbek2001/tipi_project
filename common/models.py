@@ -15,3 +15,10 @@ class Image(BaseModel):
         default=uuid.uuid4, unique=True, primary_key=True, editable=False
     )
     image = models.ImageField(upload_to="all/images/")
+
+
+class File(BaseModel):
+    id = models.UUIDField(
+        default=uuid.uuid4, unique=True, primary_key=True, editable=False
+    )
+    file = models.FileField(upload_to="files/")
