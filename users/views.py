@@ -1,0 +1,76 @@
+from django.shortcuts import render
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
+from .models import CustomUser
+from common.permissions import IsSuperAdmin
+
+
+class CreateUserView(APIView):
+    permission_classes = [IsAuthenticated, IsSuperAdmin]
+
+    def post(self, request):
+        username = request.data.get("username")
+        email = request.data.get("email")
+        password = request.data.get("password")
+        role = request.data.get("role")
+
+        if not username or not email or not password or not role:
+            return Response(
+                {"error": "Barcha maydonlar talab qilinadi."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if role not in ["ADMIN", "SUPER_ADMIN"]:
+            return Response(
+                {"error": "Faqat ADMIN yoki SUPER_ADMIN roliga ruxsat berilgan."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            user = CustomUser.objects.create_user(
+                username=username, email=email, password=password, role=role
+            )
+            return Response(
+                {
+                    "message": f"Foydalanuvchi yaratildi: {user.username}",
+                    "role": user.role,
+                    "password": password,
+                },
+                status=status.HTTP_201_CREATED,
+            )
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        old_password = request.data.get("old_password")
+        new_password = request.data.get("new_password")
+        confirm_new_password = request.data.get("confirm_new_password")
+
+        if not old_password or not new_password or not confirm_new_password:
+            return Response(
+                {"error": "Hamma maydon talab qilinadi."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if new_password != confirm_new_password:
+            return Response({"error": "Yangi password bir biriga mos kelmadi"})
+
+        if not user.check_password(old_password):
+            return Response(
+                {"error": "Eski parol noto'g'ri."}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        user.set_password(new_password)
+        user.save()
+
+        return Response(
+            {"message": "Parol muvaffaqiyatli yangilandi."}, status=status.HTTP_200_OK
+        )
