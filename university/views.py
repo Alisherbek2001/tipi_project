@@ -47,7 +47,13 @@ class AboutUniversityViewSet(ModelViewSet):
 class AdminstrationViewSet(ModelViewSet):
     queryset = Adminstration.objects.all()
     serializer_class = AdminstrationSerializer
-    permission_classes = [IsAuthenticated, IsSuperAdmin]
+
+    def get_permissions(self):
+        if self.action in ["list", "retrieve"]:
+            permission_classes = [AllowAny]
+        else:
+            permission_classes = [IsAuthenticated, IsSuperAdmin]
+        return [permission() for permission in permission_classes]
 
     def perform_create(self, serializer):
         serializer.save()
