@@ -10,7 +10,12 @@ from .serializers import (
     FacultySerializer,
 )
 from common.permissions import IsSuperAdmin
-from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListAPIView
+from rest_framework.generics import (
+    ListAPIView,
+    UpdateAPIView,
+    RetrieveAPIView,
+    DestroyAPIView,
+)
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -57,7 +62,7 @@ class FacultyCreateAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class FacultyRetrieveAPIView(RetrieveUpdateDestroyAPIView):
+class FacultyRetrieveAPIView(RetrieveAPIView, DestroyAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Faculty.objects.all()
     serializer_class = FacultyRetrieveSerializer
@@ -67,3 +72,19 @@ class FacultyAPIView(ListAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Faculty.objects.all()
     serializer_class = FacultySerializer
+
+
+class FacultyUpdateAPIView(UpdateAPIView):
+    permission_classes = [IsAuthenticated, IsSuperAdmin]
+    queryset = Faculty.objects.all()
+    serializer_class = FacultyCreateSerializer
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

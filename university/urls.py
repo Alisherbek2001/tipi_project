@@ -5,6 +5,7 @@ from .views import (
     FacultyCreateAPIView,
     FacultyRetrieveAPIView,
     FacultyAPIView,
+    FacultyUpdateAPIView,
 )
 from django.urls import path
 
@@ -85,5 +86,10 @@ urlpatterns = [
         "faculty/<int:pk>/",
         FacultyRetrieveAPIView.as_view(),
         name="faculty-detail",
+    ),
+    path(
+        "faculty/<int:pk>/update/",
+        FacultyUpdateAPIView.as_view(),
+        name="faculty-update",
     ),
 ]
