@@ -98,9 +98,15 @@ class FacultyRetrieveAPIView(RetrieveAPIView, DestroyAPIView):
 
 
 class FacultyAPIView(ListAPIView):
-    permission_classes = [IsAuthenticated, IsSuperAdmin]
     queryset = Faculty.objects.all()
     serializer_class = FacultySerializer
+
+    def get_permissions(self):
+        if self.request.method == "GET":
+            permission_classes = [AllowAny]
+        else:
+            permission_classes = [IsAuthenticated, IsSuperAdmin]
+        return [permission() for permission in permission_classes]
 
 
 class FacultyUpdateAPIView(UpdateAPIView):
